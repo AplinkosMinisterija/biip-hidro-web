@@ -1,0 +1,7 @@
+<svg id="MDI_car-brake-alert" data-name="MDI / car-brake-alert" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Boundary" fill="#AB083C" stroke="rgba(0,0,0,0)" stroke-width="1" opacity="0">
+    <rect width="24" height="24" stroke="none"/>
+    <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+  </g>
+  <path id="Path_car-brake-alert" data-name="Path / car-brake-alert" d="M11,15h2v2H11V15m0-8h2v6H11V7m1-4a9,9,0,1,0,9,9,9,9,0,0,0-9-9m0,16a7,7,0,1,1,7-7,7.008,7.008,0,0,1-7,7m8.5,1.5a12.071,12.071,0,0,0,0-17L19.42,4.58a10.478,10.478,0,0,1,0,14.84L20.5,20.5M4.58,19.42a10.478,10.478,0,0,1,0-14.84L3.5,3.5a12.071,12.071,0,0,0,0,17Z" fill="#AB083C"/>
+</svg>
