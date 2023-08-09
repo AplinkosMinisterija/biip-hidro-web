@@ -20,7 +20,7 @@ import {
   BiWater
 } from "react-icons/bi";
 import { BsLayersHalf, BsLink45Deg } from "react-icons/bs";
-import { CgMathMinus, CgMathPlus } from "react-icons/cg";
+import { CgMathMinus } from "react-icons/cg";
 import { FaTrash } from "react-icons/fa";
 import { FiClock, FiDownload, FiPhone, FiUser, FiUsers } from "react-icons/fi";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -90,8 +90,6 @@ const Icon = ({ name, className }: IconProps) => {
       return <BiWater className={className} />;
     case "verified":
       return <VscVerified className={className} />;
-    case "plus":
-      return <CgMathPlus className={className} />;
     case "minus":
       return <CgMathMinus className={className} />;
     case "search":

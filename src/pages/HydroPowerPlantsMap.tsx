@@ -4,7 +4,6 @@ import "moment/locale/lt";
 //@ts-ignore
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { isEqual } from "lodash";
 import { useState } from "react";
 import {
   MapContainer,
@@ -14,21 +13,15 @@ import {
   ZoomControl
 } from "react-leaflet";
 import styled from "styled-components";
-import ButtonsGroup from "../components/buttons/ButtonsGroup";
-import Datepicker from "../components/fields/DatePicker";
 import SelectField from "../components/fields/SelectField";
 import MapLayout from "../components/Layouts/MapLayout";
+import ButtonFilter from "../components/other/ButtonFilter";
 import HydroPopUp from "../components/other/HydroPopUp";
 import { device } from "../styles";
 import { TimeRanges } from "../utils/constants";
-import {
-  getCustomTimeRangeToQuery,
-  handleViolationCount,
-  timeRangeOptions,
-  timeRangeToQuery
-} from "../utils/functions";
+import { handleGetViolationCount, timeRangeToQuery } from "../utils/functions";
 import { useHydroPowerPlantsMap } from "../utils/hooks";
-import { inputLabels, timeRangeLabels } from "../utils/texts";
+import { inputLabels } from "../utils/texts";
 import { HydroPowerPlant, Range } from "../utils/types";
 
 interface HydroPowerPlantsMapProps {
@@ -40,15 +33,14 @@ const HydroPowerPlantsMap = ({
   center = [55.322, 23.897],
   zoom = 8
 }: HydroPowerPlantsMapProps) => {
-  const [openCalendar, setOpenCalendar] = useState(false);
   const [timeFilter, setTimeFilter] = useState(TimeRanges.HOUR);
-  const [customDate, setCustomDate] = useState<Range>(timeRangeToQuery.hour);
+  const [dateFilter, setDateFilter] = useState<Range>(timeRangeToQuery.hour);
   const [location, setLocation] = useState<HydroPowerPlant>();
   const [map, setMap] = useState<any>();
   const isMobile = useMediaQuery(device.mobileL);
 
   const { hydroPowerPlants, current, setCurrent } =
-    useHydroPowerPlantsMap(customDate);
+    useHydroPowerPlantsMap(dateFilter);
 
   const greenMarker = L.icon({
     iconUrl: "/greenMarker.svg",
@@ -73,7 +65,7 @@ const HydroPowerPlantsMap = ({
       return (item.geom.marker = blackMarker);
     }
 
-    const violationCount = handleViolationCount(item);
+    const violationCount = handleGetViolationCount(item);
 
     if (violationCount) {
       item.geom.marker = redMarker;
@@ -89,19 +81,10 @@ const HydroPowerPlantsMap = ({
     if (option) {
       setCurrent(option);
       const markerCoordinates = [...option.geom.coordinates];
-
       map?.flyTo(markerCoordinates.reverse(), 15);
       return;
     }
     setCurrent(undefined);
-  };
-
-  const handleSetDateRange = (option: TimeRanges) => {
-    setTimeFilter(option);
-    if (isEqual(option, TimeRanges.OTHER_DAY)) {
-      return setOpenCalendar(true);
-    }
-    setCustomDate(timeRangeToQuery[option]);
   };
 
   return (
@@ -117,33 +100,17 @@ const HydroPowerPlantsMap = ({
             }
             options={hydroPowerPlants}
           />
-          <ButtonContainer>
-            <ButtonsGroup
-              options={timeRangeOptions}
-              getOptionLabel={(option: TimeRanges) => timeRangeLabels[option]}
-              onChange={(option) => {
-                handleSetDateRange(option);
-              }}
-              isSelected={(option) => {
-                return isEqual(timeFilter, option);
-              }}
-            />
-            <Datepicker
-              onClose={() => {
-                setOpenCalendar(false);
-              }}
-              value={customDate.time.$gte}
-              open={openCalendar}
-              onChange={(date) =>
-                setCustomDate(getCustomTimeRangeToQuery(date!))
-              }
-            />
-          </ButtonContainer>
+          <ButtonFilter
+            timeFilter={timeFilter}
+            dateFilter={dateFilter}
+            onSetTimeFilter={setTimeFilter}
+            onSetDateFilter={setDateFilter}
+          />
         </MapBarContainer>
 
         {current && (
           <HydroPopUp
-            customDate={customDate}
+            customDate={dateFilter}
             timeFilter={timeFilter}
             current={current}
             onClose={() => setCurrent(undefined)}
@@ -166,14 +133,15 @@ const HydroPowerPlantsMap = ({
           />
           <ZoomControl position={isMobile ? "bottomleft" : "topright"} />
 
-          {hydroPowerPlants?.map((item: HydroPowerPlant, index: number) => {
+          {hydroPowerPlants?.map((item: HydroPowerPlant) => {
             handleSetMarker(item);
+            const { geom } = item;
 
             return (
               <Marker
-                position={[item.geom.coordinates[1], item.geom.coordinates[0]]}
+                position={[geom.coordinates[1], geom.coordinates[0]]}
                 //@ts-ignore
-                icon={item.geom.marker}
+                icon={geom.marker}
                 eventHandlers={{
                   click: () => setCurrent(item),
                   mouseover: (e: any) => {
@@ -220,12 +188,6 @@ const StyledSelectField = styled(SelectField)`
   @media ${device.mobileL} {
     min-width: 100%;
   }
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  position: relative;
 `;
 
 const MapBarContainer = styled.div`

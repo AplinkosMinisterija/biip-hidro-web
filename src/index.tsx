@@ -1,6 +1,15 @@
+import { useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+import {
+  BrowserRouter,
+  createRoutesFromChildren,
+  matchRoutes,
+  useLocation,
+  useNavigationType
+} from "react-router-dom";
 import { ThemeProvider } from "styled-components";
+import * as Sentry from "@sentry/react";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
@@ -9,13 +18,39 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
+const queryClient = new QueryClient();
+const env = process.env;
+
+if (env.REACT_APP_SENTRY_DSN) {
+  Sentry.init({
+    environment: env.REACT_APP_ENVIRONMENT,
+    dsn: env.REACT_APP_SENTRY_DSN,
+    integrations: [
+      new Sentry.BrowserTracing({
+        routingInstrumentation: Sentry.reactRouterV6Instrumentation(
+          useEffect,
+          useLocation,
+          useNavigationType,
+          createRoutesFromChildren,
+          matchRoutes
+        )
+      })
+    ],
+    tracesSampleRate: 1,
+    release: env.REACT_APP_VERSION,
+    tracePropagationTargets: [env.REACT_APP_MAPS_HOST!]
+  });
+}
+
 root.render(
-  <ThemeProvider theme={theme}>
-    <GlobalStyle />
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </ThemeProvider>
+  <QueryClientProvider client={queryClient}>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ThemeProvider>
+  </QueryClientProvider>
 );
 
 // If you want your app to work offline and load faster, you can change

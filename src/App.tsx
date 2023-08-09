@@ -18,7 +18,7 @@ Interaction.modes.interpolate = Interpolate;
 
 moment.locale("lt");
 
-function App() {
+const App = () => {
   useEffect(() => {
     initGA();
     logPageView();
@@ -39,6 +39,6 @@ function App() {
       <ToastContainer />
     </>
   );
-}
+};
 
 export default App;

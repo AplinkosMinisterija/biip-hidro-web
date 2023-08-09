@@ -104,14 +104,6 @@ const SecondRow = styled.div`
   margin-bottom: 57px;
 `;
 
-const Title = styled.div`
-  font-size: 2.3rem;
-  font-weight: bold;
-
-  color: white;
-  margin-right: 11px;
-`;
-
 const BurgerIcon = styled(Icon)`
   cursor: pointer;
   font-size: 2rem;
@@ -124,12 +116,6 @@ const ExitIcon = styled(Icon)`
   font-size: 2rem;
   vertical-align: middle;
   color: white;
-`;
-
-const Hr = styled.div`
-  width: 50%;
-  margin: 10px 0 10px 0;
-  border-bottom: 1px solid #eeebe561;
 `;
 
 export default MobileNavbar;

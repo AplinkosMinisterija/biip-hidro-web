@@ -65,7 +65,14 @@ const Table = ({
         })}`
       });
     }
-  }, [searchParams, tableDataInfo, loading]);
+  }, [
+    searchParams,
+    totalPages,
+    tableDataInfo,
+    loading,
+    navigate,
+    params?.page
+  ]);
 
   const generateTableContent = () => {
     if (!isEmpty(tableDataInfo.data)) {

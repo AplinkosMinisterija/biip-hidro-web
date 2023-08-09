@@ -10,7 +10,7 @@ const AppLogo = ({ textColor = "#040f2c" }: AppLogoProps) => {
   const navigate = useNavigate();
   return (
     <LogoContainer onClick={() => navigate("/")}>
-      <Logo src="/hydro.svg" />
+      <Logo title="hidroelektinė" src="/hydro.svg" />
       <Text color={textColor}>{formLabels.hydroPowerPlant}</Text>
     </LogoContainer>
   );

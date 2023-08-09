@@ -1,9 +1,6 @@
 import Axios, { AxiosInstance, AxiosResponse } from "axios";
-import { HydroPowerPlant } from "./types";
-
-import Cookies from "universal-cookie";
 import { Resources, SortFields } from "./constants";
-const cookies = new Cookies();
+import { HydroPowerPlant } from "./types";
 
 interface GetAll {
   resource: string;
@@ -78,18 +75,7 @@ class Api {
 
     this.AuthApiAxios.interceptors.request.use(
       (config) => {
-        if (!config.url) {
-          return config;
-        }
-        const token = cookies.get("token");
-        const profileId = cookies.get("profileId");
-        if (token) {
-          config.headers!.Authorization = "Bearer " + token;
-
-          if (!isNaN(profileId)) config.headers!["X-Profile"] = profileId;
-        }
         config.url = this.proxy + config.url;
-
         return config;
       },
       (error) => {
@@ -99,13 +85,9 @@ class Api {
   }
 
   errorWrapper = async (endpoint: () => Promise<AxiosResponse<any, any>>) => {
-    try {
-      const { data } = await endpoint();
+    const { data } = await endpoint();
 
-      return data;
-    } catch (e: any) {
-      return { error: e.response.data };
-    }
+    return data;
   };
 
   get = async ({
@@ -190,17 +172,13 @@ class Api {
       resource: Resources.HYDRO_POWER_PLANTS_TABLE
     });
 
-  getHydroPowerPlant = async (id: string) =>
+  getHydroPowerPlant = async (id: string): Promise<HydroPowerPlant> =>
     await this.getOne({
       resource: Resources.HYDRO_POWER_PLANTS,
       id
     });
 
-  getEventsByHydroPowerPlantId = async ({
-    filter,
-    page,
-    query
-  }: TableList): Promise<Event[]> =>
+  getEventsByHydroPowerPlantId = async ({ filter, page, query }: TableList) =>
     await this.getAll({
       resource: Resources.EVENTS,
       filter,
@@ -209,5 +187,6 @@ class Api {
       query
     });
 }
+const api = new Api();
 
-export default new Api();
+export default api;

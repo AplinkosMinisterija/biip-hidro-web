@@ -1,140 +1,79 @@
 import { isEqual } from "lodash";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useQuery } from "react-query";
 import { useNavigate } from "react-router";
 import api from "./api";
-import { handleResponse } from "./functions";
+import { handleAlert, mapHydroPowerPlants } from "./functions";
 import { slugs } from "./routes";
-import { Event, HydroPowerPlant, Range } from "./types";
-
-export const useCurrentLocation = () => {
-  const [location, setLocation] = useState({});
-
-  useEffect(() => {
-    if (navigator?.geolocation) {
-      navigator.geolocation.getCurrentPosition((location) => {
-        const { latitude, longitude } = location.coords;
-        setLocation({ x: latitude, y: longitude });
-      });
-    }
-  }, []);
-  return location;
-};
+import { HydroPowerPlant, Range } from "./types";
 
 export const useHydroPowerPlantsMap = (range: Range) => {
-  const [hydroPowerPlants, setHydros] = useState<HydroPowerPlant[]>([]);
   const [current, setCurrent] = useState<HydroPowerPlant>();
-  const getHydros = async () => {
-    handleResponse({
-      endpoint: () => api.getHydroPowerPlantsMap({ query: range }),
-      onSuccess: (list: HydroPowerPlant[]) => {
-        setHydros(
-          list.map((item) => {
-            return {
-              ...item,
-              name: handleTemporaryTextTransformation(item.name)
-            };
-          })
-        );
-
+  const { data = [] } = useQuery(
+    ["hydroPowerPlantsMap", range],
+    () => api.getHydroPowerPlantsMap({ query: range }),
+    {
+      onError: () => {
+        handleAlert();
+      },
+      onSuccess(data) {
         if (current?.id) {
-          setCurrent(list.find((hydro) => isEqual(hydro.id, current.id)));
+          setCurrent(data.find((hydro) => isEqual(hydro.id, current.id)));
         }
       }
-    });
-  };
-
-  useEffect(() => {
-    getHydros();
-  }, [range]);
+    }
+  );
+  const hydroPowerPlants = mapHydroPowerPlants(data);
 
   return { hydroPowerPlants, current, setCurrent };
 };
 
 export const useHydroPowerPlant = (id: string) => {
-  const [loading, setLoading] = useState(true);
-  const [hydroPowerPlant, setHydros] = useState<HydroPowerPlant>();
   const navigate = useNavigate();
-  const getHydros = async () => {
-    handleResponse({
-      endpoint: () => api.getHydroPowerPlant(id!),
+  const { data, isLoading } = useQuery(
+    ["hydroPowerPlant", id],
+    () => api.getHydroPowerPlant(id),
+    {
       onError: () => {
         navigate(slugs.hydroPowerPlantsMap);
-      },
-      onSuccess: (item: HydroPowerPlant) => {
-        setHydros(item);
-        setLoading(false);
       }
-    });
-  };
+    }
+  );
 
-  useEffect(() => {
-    getHydros();
-  }, [id]);
-
-  return { loading, hydroPowerPlant };
+  return { isLoading, hydroPowerPlant: data };
 };
 
 export const useEventsByHydroPowerPlantId = (id: string, range: Range) => {
-  const [loading, setLoading] = useState(true);
-  const [events, setEvents] = useState<Event[]>([]);
+  const query = JSON.stringify({
+    hydroPowerPlant: id,
+    ...range
+  });
 
-  console.log(range, "range");
-  const getHydros = async () => {
-    setLoading(true);
-    handleResponse({
-      endpoint: () =>
-        api.getEventsByHydroPowerPlantId({
-          id,
-          query: JSON.stringify({
-            hydroPowerPlant: id,
-            ...range
-          })
-        }),
-      onSuccess: (list: Event[]) => {
-        setEvents(list);
-
-        setLoading(false);
+  const { data, isLoading } = useQuery(
+    ["events", id, range],
+    () => api.getEventsByHydroPowerPlantId({ query }),
+    {
+      onError: () => {
+        handleAlert();
       }
-    });
-  };
+    }
+  );
 
-  useEffect(() => {
-    getHydros();
-  }, [range]);
-
-  return { events, eventsLoading: loading };
+  return { events: data, eventsLoading: isLoading };
 };
 
 export const useHydroPowerPlantsTable = () => {
-  const [loading, setLoading] = useState(true);
-  const [hydroPowerPlants, setHydros] = useState<HydroPowerPlant[]>([]);
-  const getHydros = async () => {
-    handleResponse({
-      endpoint: () => api.getHydroPowerPlantsTable(),
-      onSuccess: (list: HydroPowerPlant[]) => {
-        setHydros(
-          list.map((item) => {
-            return {
-              ...item,
-              name: handleTemporaryTextTransformation(item.name)
-            };
-          })
-        );
-        setLoading(false);
+  const { data = [], isLoading } = useQuery(
+    ["hydroPowerPlantsTable"],
+    () => api.getHydroPowerPlantsTable(),
+    {
+      onError: () => {
+        handleAlert();
       }
-    });
-  };
+    }
+  );
 
-  useEffect(() => {
-    getHydros();
-  }, []);
+  const hydroPowerPlants = mapHydroPowerPlants(data);
 
-  return { hydroPowerPlants, loading };
-};
-
-const handleTemporaryTextTransformation = (word: string) => {
-  const newWord =
-    word.charAt(0).toUpperCase() + word.slice(1).toLocaleLowerCase();
-
-  return newWord.replace("he", "HE");
+  return { hydroPowerPlants, isLoading };
 };

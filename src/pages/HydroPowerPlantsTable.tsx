@@ -19,9 +19,10 @@ const HydroPowerPlantsTable = () => {
   const [name, setName] = useState("");
   const { page } = Object.fromEntries([...Array.from(searchParams)]);
   const [tableData, setTableData] = useState<TableData>({ data: [] });
-  const { hydroPowerPlants, loading } = useHydroPowerPlantsTable();
+  const { hydroPowerPlants, isLoading: loading } = useHydroPowerPlantsTable();
   const navigate = useNavigate();
-  const handleSetTableData = () => {
+
+  useEffect(() => {
     const pageData = handlePagination({
       data: getFilteredOptions(hydroPowerPlants, name, (option) => option.name),
       page: page,
@@ -31,11 +32,7 @@ const HydroPowerPlantsTable = () => {
       data: mapHydro(pageData.slicedData),
       totalPages: pageData.totalPages
     });
-  };
-
-  useEffect(() => {
-    handleSetTableData();
-  }, [page, loading, name]);
+  }, [page, loading, name, hydroPowerPlants]);
 
   const handleSetFilter = (value: string) => {
     navigate({
