@@ -9,6 +9,7 @@ import TextField from "../components/fields/TextField";
 import { getFilteredOptions } from "../components/fields/utils/functions";
 import DefaultLayout from "../components/Layouts/Default";
 import Table, { TableData } from "../components/other/Table";
+import { device } from "../styles";
 import { handlePagination, mapHydro } from "../utils/functions";
 import { useHydroPowerPlantsTable } from "../utils/hooks";
 import { slugs } from "../utils/routes";
@@ -19,9 +20,10 @@ const HydroPowerPlantsTable = () => {
   const [name, setName] = useState("");
   const { page } = Object.fromEntries([...Array.from(searchParams)]);
   const [tableData, setTableData] = useState<TableData>({ data: [] });
-  const { hydroPowerPlants, loading } = useHydroPowerPlantsTable();
+  const { hydroPowerPlants, isLoading } = useHydroPowerPlantsTable();
   const navigate = useNavigate();
-  const handleSetTableData = () => {
+
+  useEffect(() => {
     const pageData = handlePagination({
       data: getFilteredOptions(hydroPowerPlants, name, (option) => option.name),
       page: page,
@@ -31,11 +33,8 @@ const HydroPowerPlantsTable = () => {
       data: mapHydro(pageData.slicedData),
       totalPages: pageData.totalPages
     });
-  };
-
-  useEffect(() => {
-    handleSetTableData();
-  }, [page, loading, name]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, name, isLoading]);
 
   const handleSetFilter = (value: string) => {
     navigate({
@@ -56,10 +55,9 @@ const HydroPowerPlantsTable = () => {
             onChange={(value) => handleSetFilter(value)}
           />
         </FilterContainer>
-
         <Table
           onClick={(id: string) => navigate(slugs.hydroPowerPlant(id))}
-          loading={loading}
+          loading={isLoading}
           tableDataInfo={tableData}
           labels={hydroPowerPlantsLabels}
           isFilterApplied={!!name}
@@ -78,6 +76,9 @@ const Container = styled.div`
   margin: auto;
   padding: 20px 0 0 0;
   gap: 12px;
+  @media ${device.mobileL} {
+    padding: 20px;
+  }
 `;
 
 const FilterContainer = styled.div`

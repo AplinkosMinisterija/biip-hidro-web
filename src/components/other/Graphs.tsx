@@ -13,6 +13,8 @@ interface GraphsProps {
   current: HydroPowerPlant;
 }
 
+const getLineColor = (violated: boolean) => (violated ? "#FE5B78" : "#0862AB");
+
 export const Graphs = ({ current, timeFilter }: GraphsProps) => {
   const unit = timeFilter.replace("other", "hour");
 
@@ -64,7 +66,6 @@ export const Graphs = ({ current, timeFilter }: GraphsProps) => {
       x: {
         ticks: { maxTicksLimit: 9 },
         offset: true,
-
         type: "time",
         time: {
           displayFormats: {
@@ -78,6 +79,41 @@ export const Graphs = ({ current, timeFilter }: GraphsProps) => {
     }
   };
 
+  const upperBasinOptions = {
+    ...commonOptions.plugins,
+    annotation: {
+      annotations: {
+        box: {
+          drawTime: "beforeDraw",
+          display: true,
+          type: "box",
+          yMin: current?.upperBasinMin || 0,
+          yMax: current?.upperBasinMax || 0,
+          borderColor: "#11E011",
+          borderWidth: 0,
+          backgroundColor: "#d3f8d392"
+        }
+      }
+    }
+  };
+
+  const lowerBasinOptions = {
+    ...commonOptions.plugins,
+    annotation: {
+      annotations: {
+        box: {
+          drawTime: "beforeDraw",
+          display: true,
+          type: "box",
+          yMin: current?.lowerBasinMin || 0,
+          borderColor: "#11E011",
+          borderWidth: 0,
+          backgroundColor: "#d3f8d392"
+        }
+      }
+    }
+  };
+
   const commonDataSetOptions = {
     borderWidth: 1,
     pointRadius: 0
@@ -86,8 +122,8 @@ export const Graphs = ({ current, timeFilter }: GraphsProps) => {
   const upperBasinDataChartData = {
     datasets: [
       {
-        borderColor: violatedUpperBasinData ? "#FE5B78" : "#0862AB",
-        backgroundColor: violatedUpperBasinData ? "#FE5B78" : "#0862AB",
+        borderColor: getLineColor(violatedUpperBasinData),
+        backgroundColor: getLineColor(violatedUpperBasinData),
         data: upperBasinData,
         ...commonDataSetOptions
       }
@@ -97,8 +133,8 @@ export const Graphs = ({ current, timeFilter }: GraphsProps) => {
   const lowerBasinChartData = {
     datasets: [
       {
-        borderColor: violatedLowerBasinData ? "#FE5B78" : "#0862AB",
-        backgroundColor: violatedLowerBasinData ? "#FE5B78" : "#0862AB",
+        borderColor: getLineColor(violatedLowerBasinData),
+        backgroundColor: getLineColor(violatedLowerBasinData),
         data: lowerBasinData,
         ...commonDataSetOptions
       }
@@ -110,24 +146,7 @@ export const Graphs = ({ current, timeFilter }: GraphsProps) => {
       <MiniGraphWrapper label={formLabels.upperBasin}>
         <Line
           options={{
-            //@ts-ignore
-            plugins: {
-              ...commonOptions.plugins,
-              annotation: {
-                annotations: {
-                  box: {
-                    drawTime: "beforeDraw",
-                    display: true,
-                    type: "box",
-                    yMin: current?.upperBasinMin || 0,
-                    yMax: current?.upperBasinMax || 0,
-                    borderColor: "#11E011",
-                    borderWidth: 0,
-                    backgroundColor: "#d3f8d392"
-                  }
-                }
-              }
-            },
+            plugins: upperBasinOptions as any,
             scales: commonOptions.scales as any
           }}
           data={upperBasinDataChartData}
@@ -139,30 +158,14 @@ export const Graphs = ({ current, timeFilter }: GraphsProps) => {
           </LegendItem>
           <LegendItem>
             <LegendLabel color="#d3f8d392" />
-            <Value>{descriptions.basinMax}</Value>
+            <Value>{descriptions.upperBasinMax}</Value>
           </LegendItem>
         </Legend>
       </MiniGraphWrapper>
       <MiniGraphWrapper label={formLabels.lowerBasin}>
         <Line
           options={{
-            //@ts-ignore
-            plugins: {
-              ...commonOptions.plugins,
-              annotation: {
-                annotations: {
-                  box: {
-                    drawTime: "beforeDraw",
-                    display: true,
-                    type: "box",
-                    yMin: current?.lowerBasinMin || 0,
-                    borderColor: "#11E011",
-                    borderWidth: 0,
-                    backgroundColor: "#d3f8d392"
-                  }
-                }
-              }
-            },
+            plugins: lowerBasinOptions as any,
             scales: commonOptions.scales as any
           }}
           data={lowerBasinChartData}
@@ -174,7 +177,7 @@ export const Graphs = ({ current, timeFilter }: GraphsProps) => {
           </LegendItem>
           <LegendItem>
             <LegendLabel color="#d3f8d392" />
-            <Value>{descriptions.basinMax}</Value>
+            <Value>{descriptions.upperBasinMax}</Value>
           </LegendItem>
         </Legend>
       </MiniGraphWrapper>

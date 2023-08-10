@@ -1,12 +1,11 @@
 import { isEmpty } from "lodash";
-import moment from "moment";
 
 import React from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 import { device } from "../../styles";
 import { DateFormats, TimeRanges } from "../../utils/constants";
-import { inRange, lt } from "../../utils/functions";
+import { getTimeRangeLabel, inRange, lt } from "../../utils/functions";
 import { slugs } from "../../utils/routes";
 import { buttonsTitles, formLabels } from "../../utils/texts";
 import { HydroPowerPlant, Range } from "../../utils/types";
@@ -33,25 +32,23 @@ const HydroPopUp = ({
 }: PopUpProps) => {
   const { upperBasinMax, upperBasinMin, events, lowerBasinMin } = current;
   const navigate = useNavigate();
-
   const format = DateFormats.DAY;
   const dateFrom = customDate.time.$gte;
   const dateTo = customDate.time.$lt;
-
-  const timeRangeLabel = `${moment(dateFrom).format(format)} - ${moment(
-    dateTo
-  ).format(format)}`;
-
+  const timeRangeLabel = getTimeRangeLabel(dateFrom, dateTo, format);
   let violationCount = current?.geom?.violationCount || 0;
-
   const hasApi = !!current?.apiId;
 
   const renderUpperBasinValue = () => {
     const lastEvent = events?.[events?.length - 1]?.upperBasin;
     if (upperBasinMin && upperBasinMax) {
-      const orLastViolated = !inRange(lastEvent, upperBasinMin, upperBasinMax);
+      const orLastEventViolated = !inRange(
+        lastEvent,
+        upperBasinMin,
+        upperBasinMax
+      );
 
-      if (orLastViolated) {
+      if (orLastEventViolated) {
         return (
           <BasinValue variant={ButtonColors.DANGER}>{lastEvent}</BasinValue>
         );
@@ -77,9 +74,9 @@ const HydroPopUp = ({
   const renderLowerBasinValue = () => {
     const lastEvent = events?.[events?.length - 1]?.lowerBasin;
     if (lowerBasinMin) {
-      const orLastViolated = lt(lastEvent, lowerBasinMin);
+      const orLastEventViolated = lt(lastEvent, lowerBasinMin);
 
-      if (orLastViolated) {
+      if (orLastEventViolated) {
         return (
           <BasinValue variant={ButtonColors.DANGER}>{lastEvent}</BasinValue>
         );

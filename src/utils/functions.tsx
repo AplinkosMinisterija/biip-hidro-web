@@ -7,11 +7,6 @@ import { ButtonColors } from "../components/buttons/Button";
 import { DateFormats, TimeRanges } from "./constants";
 import { validationTexts } from "./texts";
 import { HydroPowerPlant, HydroPowerPlantTableProps } from "./types";
-interface SetResponseProps {
-  endpoint: () => Promise<any>;
-  onSuccess: (data: any) => void;
-  onError?: (data: any) => void;
-}
 
 interface HandlePaginationProps {
   data: any[];
@@ -19,41 +14,20 @@ interface HandlePaginationProps {
   pageSize: number;
 }
 
-export const handleResponse = async ({
-  endpoint,
-  onSuccess,
-  onError
-}: SetResponseProps) => {
-  const response = await endpoint();
-  if (onError && response?.error) {
-    return onError(
-      validationTexts[response?.error?.type!] ||
-        validationTexts[response?.error?.message!] ||
-        validationTexts.error
-    );
-  }
-
-  if (!response || response?.error) {
-    return handleAlert(response?.error?.type!);
-  }
-
-  return onSuccess(response);
-};
-
 export const validateFileTypes = (
   files: File[],
   availableMimeTypes: string[]
 ) => {
   for (let i = 0; i < files.length; i++) {
     const availableType = availableMimeTypes.find(
-      (type) => type == files[i].type
+      (type) => type === files[i].type
     );
     if (!availableType) return false;
   }
   return true;
 };
 
-export const handleAlert = (responseError: string) => {
+export const handleAlert = (responseError?: string) => {
   toast.error(
     validationTexts[responseError as keyof typeof validationTexts] ||
       validationTexts.error,
@@ -121,12 +95,6 @@ export const timeRangeToQuery = {
       $gte: moment().subtract(1, "month").startOf("day").format(),
       $lt: moment().endOf("day").format()
     }
-  },
-  [TimeRanges.OTHER_DAY]: {
-    time: {
-      $gte: "",
-      $lt: ""
-    }
   }
 };
 
@@ -141,7 +109,7 @@ export const getCustomTimeRangeToQuery = (day: Date) => {
 
 export const timeRangeOptions = Object.values(TimeRanges);
 
-export const handleViolationCount = (hydro: HydroPowerPlant) => {
+export const handleGetViolationCount = (hydro: HydroPowerPlant) => {
   if (!hydro) return 0;
 
   const { upperBasinMax, upperBasinMin, lowerBasinMin, events } = hydro;
@@ -240,6 +208,27 @@ export const inRange = (num: number, start: number, end: number) => {
 
 export const lt = (num: number, other: number) => {
   return num <= other;
+};
+
+export const getTimeRangeLabel = (
+  dateFrom: string,
+  dateTo: string,
+  format: DateFormats
+) => `${moment(dateFrom).format(format)} - ${moment(dateTo).format(format)}`;
+
+export const mapHydroPowerPlants = (list: HydroPowerPlant[]) =>
+  list.map((item) => {
+    return {
+      ...item,
+      name: handleTemporaryTextTransformation(item.name)
+    };
+  });
+
+const handleTemporaryTextTransformation = (word: string) => {
+  const newWord =
+    word.charAt(0).toUpperCase() + word.slice(1).toLocaleLowerCase();
+
+  return newWord.replace("he", "HE");
 };
 
 const BasinValue = styled.span<{

@@ -78,7 +78,7 @@ export const timeRangeLabels = {
 export const descriptions = {
   tableNotFound: "Atsiprašome nieko neradome pagal pasirinktus filtrus",
   upperBasinMin: "Leistinas žemiausias vandens lygis tvenkinyje (ŽVL)",
-  basinMax: "Leistinas vandens lygis tvenkinyje",
+  upperBasinMax: "Leistinas vandens lygis tvenkinyje",
   lowerBasinMin:
     "Leistinas žemiausias vandens lygis tvenkinio žemutiniame bjefe",
   waterLevel: "Matavimų duomenys"

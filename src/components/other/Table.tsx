@@ -65,7 +65,7 @@ const Table = ({
         })}`
       });
     }
-  }, [searchParams, tableDataInfo, loading]);
+  }, [totalPages, loading, navigate, params?.page]);
 
   const generateTableContent = () => {
     if (!isEmpty(tableDataInfo.data)) {
@@ -91,6 +91,15 @@ const Table = ({
     }
   };
 
+  const handlePageChange = (e: { selected: number }) => {
+    navigate({
+      search: `?${createSearchParams({
+        ...params,
+        [page]: (e.selected + 1).toString()
+      })}`
+    });
+  };
+
   if (loading) return <LoaderComponent />;
 
   return (
@@ -114,14 +123,7 @@ const Table = ({
           pageRangeDisplayed={1}
           marginPagesDisplayed={1}
           forcePage={parseInt(params?.[page]) - 1 || 0}
-          onPageChange={(e) =>
-            navigate({
-              search: `?${createSearchParams({
-                ...params,
-                [page]: (e.selected + 1).toString()
-              })}`
-            })
-          }
+          onPageChange={handlePageChange}
           containerClassName="pagination"
           activeClassName="active"
           pageLinkClassName="page-link"
@@ -232,7 +234,7 @@ const StyledReactPaginate = styled(ReactPaginate)`
     border: none;
     font-size: 1.2rem;
     font-weight: bold;
-    font-family: Atkinson Hyperlegible;
+    font-family: "Roboto", sans-serif;
     cursor: pointer;
   }
 
