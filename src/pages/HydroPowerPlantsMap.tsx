@@ -35,10 +35,9 @@ const HydroPowerPlantsMap = ({
 }: HydroPowerPlantsMapProps) => {
   const [timeFilter, setTimeFilter] = useState(TimeRanges.HOUR);
   const [dateFilter, setDateFilter] = useState<Range>(timeRangeToQuery.hour);
-  const [location, setLocation] = useState<HydroPowerPlant>();
+  const [locationInput, setLocationInput] = useState<HydroPowerPlant>();
   const [map, setMap] = useState<any>();
   const isMobile = useMediaQuery(device.mobileL);
-
   const { hydroPowerPlants, current, setCurrent } =
     useHydroPowerPlantsMap(dateFilter);
 
@@ -76,7 +75,7 @@ const HydroPowerPlantsMap = ({
   };
 
   const handleSetLocation = (option: HydroPowerPlant) => {
-    setLocation(option);
+    setLocationInput(option);
 
     if (option) {
       setCurrent(option);
@@ -94,7 +93,7 @@ const HydroPowerPlantsMap = ({
           <StyledSelectField
             placeholder={inputLabels.search}
             onChange={handleSetLocation}
-            value={location}
+            value={locationInput}
             getOptionLabel={(option: HydroPowerPlant) =>
               `${option?.name}, ${option?.hydrostaticId}`
             }
@@ -133,12 +132,13 @@ const HydroPowerPlantsMap = ({
           />
           <ZoomControl position={isMobile ? "bottomleft" : "topright"} />
 
-          {hydroPowerPlants?.map((item: HydroPowerPlant) => {
+          {hydroPowerPlants?.map((item: HydroPowerPlant, key) => {
             handleSetMarker(item);
             const { geom } = item;
 
             return (
               <Marker
+                key={`marker-${key}`}
                 position={[geom.coordinates[1], geom.coordinates[0]]}
                 //@ts-ignore
                 icon={geom.marker}

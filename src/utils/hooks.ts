@@ -49,7 +49,7 @@ export const useEventsByHydroPowerPlantId = (id: string, range: Range) => {
     ...range
   });
 
-  const { data, isLoading } = useQuery(
+  const { data = [], isLoading } = useQuery(
     ["events", id, range],
     () => api.getEventsByHydroPowerPlantId({ query }),
     {

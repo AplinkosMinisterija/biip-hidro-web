@@ -78,14 +78,11 @@ export const theme: Theme = {
 export const GlobalStyle = createGlobalStyle`
   *{
     box-sizing: border-box;
-    font-family: Atkinson Hyperlegible;
+    font-family: "Roboto", sans-serif;
   }
 .leaflet-popup-content{
   font-size:1.2rem
 }
-
-
-
 
   html { 
     font-size: 62.5%; 

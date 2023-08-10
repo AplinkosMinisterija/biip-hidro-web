@@ -29,8 +29,9 @@ const MobileNavbar = () => {
               </div>
             </SecondRow>
 
-            {menuRoutes.map((route) => (
+            {menuRoutes.map((route, key) => (
               <Tab
+                key={`mobile-${key}`}
                 isActive={location.pathname.includes(route.slug)}
                 onClick={() => {
                   setShowMenu(false);

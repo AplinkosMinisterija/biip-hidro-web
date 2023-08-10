@@ -28,7 +28,7 @@ const ButtonsGroup = ({
         <StyledButton
           type="button"
           disabled={disabled || option?.disabled}
-          key={`group-button${index}`}
+          key={`group-button-${index}`}
           selected={isSelected(option)}
           error={!!error}
           onClick={() => (disabled ? {} : onChange(option))}

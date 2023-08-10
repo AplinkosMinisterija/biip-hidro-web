@@ -32,23 +32,23 @@ const HydroPopUp = ({
 }: PopUpProps) => {
   const { upperBasinMax, upperBasinMin, events, lowerBasinMin } = current;
   const navigate = useNavigate();
-
   const format = DateFormats.DAY;
   const dateFrom = customDate.time.$gte;
   const dateTo = customDate.time.$lt;
-
   const timeRangeLabel = getTimeRangeLabel(dateFrom, dateTo, format);
-
   let violationCount = current?.geom?.violationCount || 0;
-
   const hasApi = !!current?.apiId;
 
   const renderUpperBasinValue = () => {
     const lastEvent = events?.[events?.length - 1]?.upperBasin;
     if (upperBasinMin && upperBasinMax) {
-      const orLastViolated = !inRange(lastEvent, upperBasinMin, upperBasinMax);
+      const orLastEventViolated = !inRange(
+        lastEvent,
+        upperBasinMin,
+        upperBasinMax
+      );
 
-      if (orLastViolated) {
+      if (orLastEventViolated) {
         return (
           <BasinValue variant={ButtonColors.DANGER}>{lastEvent}</BasinValue>
         );
@@ -74,9 +74,9 @@ const HydroPopUp = ({
   const renderLowerBasinValue = () => {
     const lastEvent = events?.[events?.length - 1]?.lowerBasin;
     if (lowerBasinMin) {
-      const orLastViolated = lt(lastEvent, lowerBasinMin);
+      const orLastEventViolated = lt(lastEvent, lowerBasinMin);
 
-      if (orLastViolated) {
+      if (orLastEventViolated) {
         return (
           <BasinValue variant={ButtonColors.DANGER}>{lastEvent}</BasinValue>
         );

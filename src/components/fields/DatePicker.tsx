@@ -105,9 +105,10 @@ const Container = styled.div`
     &:focus {
       outline: none;
     }
+ f;
     margin: 26px 32px 0px 0px;
     position: relative;
-    font: normal normal normal 1.5rem/21px Atkinson Hyperlegible;
+    font: normal normal normal 1.5rem/21px "Roboto", sans-serif;
     &:hover {
       background-color: ${({ theme }) => theme.colors.secondary};
       &::before {
@@ -158,7 +159,7 @@ const Container = styled.div`
     }
   }
   .react-datepicker-time__caption {
-    font: normal normal 600 1.6rem/40px Atkinson Hyperlegible;
+    font: normal normal 600 1.6rem/40px "Roboto", sans-serif;
     display: block !important;
     margin: 15px 0px 10px 0px;
     text-align: center;
@@ -176,11 +177,11 @@ const Container = styled.div`
     background-color: white;
     position: relative;
     z-index: 1;
-    font: normal normal normal 1.5rem/21px Atkinson Hyperlegible;
+    font: normal normal normal 1.5rem/21px "Roboto", sans-serif;
   }
   .react-datepicker__day--keyboard-selected {
     background-color: white;
-    font: normal normal normal 1.5rem/21px Atkinson Hyperlegible;
+    font: normal normal normal 1.5rem/21px "Roboto", sans-serif;
     color: #121a55;
   }
   .react-datepicker__day--selected::before {
@@ -204,7 +205,7 @@ const Container = styled.div`
     }
   }
   .react-datepicker__day-name {
-    font: normal normal bold 14px/19px Atkinson Hyperlegible;
+    font: normal normal bold 14px/19px "Roboto", sans-serif;
     letter-spacing: 0px;
     color: #151229;
     margin: 26px 32px 0px 0px;
@@ -221,7 +222,7 @@ const Container = styled.div`
   }
   .react-datepicker__current-month {
     text-align: center;
-    font: normal normal 600 1.6rem/22px Atkinson Hyperlegible;
+    font: normal normal 600 1.6rem/22px "Roboto", sans-serif;
     letter-spacing: 0px;
     color: #121a55;
     margin-top: 13px;

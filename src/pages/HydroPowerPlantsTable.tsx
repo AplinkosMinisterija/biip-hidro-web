@@ -19,7 +19,7 @@ const HydroPowerPlantsTable = () => {
   const [name, setName] = useState("");
   const { page } = Object.fromEntries([...Array.from(searchParams)]);
   const [tableData, setTableData] = useState<TableData>({ data: [] });
-  const { hydroPowerPlants, isLoading: loading } = useHydroPowerPlantsTable();
+  const { hydroPowerPlants, isLoading } = useHydroPowerPlantsTable();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,7 +32,8 @@ const HydroPowerPlantsTable = () => {
       data: mapHydro(pageData.slicedData),
       totalPages: pageData.totalPages
     });
-  }, [page, loading, name, hydroPowerPlants]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, name, isLoading]);
 
   const handleSetFilter = (value: string) => {
     navigate({
@@ -53,10 +54,9 @@ const HydroPowerPlantsTable = () => {
             onChange={(value) => handleSetFilter(value)}
           />
         </FilterContainer>
-
         <Table
           onClick={(id: string) => navigate(slugs.hydroPowerPlant(id))}
-          loading={loading}
+          loading={isLoading}
           tableDataInfo={tableData}
           labels={hydroPowerPlantsLabels}
           isFilterApplied={!!name}

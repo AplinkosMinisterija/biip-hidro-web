@@ -11,8 +11,10 @@ const NavBar = () => {
       <InnerContainer>
         <AppLogo />
         <TabContainer>
-          {menuRoutes.map((route) => (
-            <Tab onClick={() => navigate(route.slug)}>{route.name}</Tab>
+          {menuRoutes.map((route, key) => (
+            <Tab key={`tab-${key}`} onClick={() => navigate(route.slug)}>
+              {route.name}
+            </Tab>
           ))}
         </TabContainer>
       </InnerContainer>
