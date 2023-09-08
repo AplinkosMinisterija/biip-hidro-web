@@ -17,6 +17,7 @@ import SelectField from "../components/fields/SelectField";
 import MapLayout from "../components/Layouts/MapLayout";
 import ButtonFilter from "../components/other/ButtonFilter";
 import HydroPopUp from "../components/other/HydroPopUp";
+import Loader from "../components/other/Loader";
 import { device } from "../styles";
 import { TimeRanges } from "../utils/constants";
 import { handleGetViolationCount, timeRangeToQuery } from "../utils/functions";
@@ -38,7 +39,7 @@ const HydroPowerPlantsMap = ({
   const [locationInput, setLocationInput] = useState<HydroPowerPlant>();
   const [map, setMap] = useState<any>();
   const isMobile = useMediaQuery(device.mobileL);
-  const { hydroPowerPlants, current, setCurrent } =
+  const { hydroPowerPlants, current, setCurrent, isLoading } =
     useHydroPowerPlantsMap(dateFilter);
 
   const greenMarker = L.icon({
@@ -132,6 +133,12 @@ const HydroPowerPlantsMap = ({
           />
           <ZoomControl position={isMobile ? "bottomleft" : "topright"} />
 
+          {isLoading && (
+            <LoaderContainer>
+              <Loader />
+            </LoaderContainer>
+          )}
+
           {hydroPowerPlants?.map((item: HydroPowerPlant, key) => {
             handleSetMarker(item);
             const { geom } = item;
@@ -144,7 +151,7 @@ const HydroPowerPlantsMap = ({
                 icon={geom.marker}
                 eventHandlers={{
                   click: () => setCurrent(item),
-                  mouseover: (e: any) => {
+                  mouseover: (e) => {
                     e.target.openPopup();
                   }
                 }}
@@ -174,6 +181,21 @@ const StyledMapContainer = styled(MapContainer)`
   position: relative;
   display: flex;
   z-index: 1;
+  position: relative;
+`;
+
+const LoaderContainer = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4000;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Container = styled.div`
