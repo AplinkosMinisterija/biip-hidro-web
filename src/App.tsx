@@ -1,3 +1,4 @@
+import { ResizeObserver as ResizeObserverPolyfill } from "@juggle/resize-observer";
 import { Chart, Interaction, registerables } from "chart.js";
 import annotationPlugin from "chartjs-plugin-annotation";
 import { CrosshairPlugin, Interpolate } from "chartjs-plugin-crosshair";
@@ -20,6 +21,10 @@ moment.locale("lt");
 
 const App = () => {
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.ResizeObserver = window.ResizeObserver || ResizeObserverPolyfill;
+    }
+
     initGA();
     logPageView();
   }, []);
