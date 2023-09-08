@@ -9,7 +9,7 @@ import { HydroPowerPlant, Range } from "./types";
 
 export const useHydroPowerPlantsMap = (range: Range) => {
   const [current, setCurrent] = useState<HydroPowerPlant>();
-  const { data = [] } = useQuery(
+  const { data = [], isLoading } = useQuery(
     ["hydroPowerPlantsMap", range],
     () => api.getHydroPowerPlantsMap({ query: range }),
     {
@@ -25,7 +25,7 @@ export const useHydroPowerPlantsMap = (range: Range) => {
   );
   const hydroPowerPlants = mapHydroPowerPlants(data);
 
-  return { hydroPowerPlants, current, setCurrent };
+  return { hydroPowerPlants, current, setCurrent, isLoading };
 };
 
 export const useHydroPowerPlant = (id: string) => {

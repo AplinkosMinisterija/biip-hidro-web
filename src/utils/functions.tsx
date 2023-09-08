@@ -14,19 +14,6 @@ interface HandlePaginationProps {
   pageSize: number;
 }
 
-export const validateFileTypes = (
-  files: File[],
-  availableMimeTypes: string[]
-) => {
-  for (let i = 0; i < files.length; i++) {
-    const availableType = availableMimeTypes.find(
-      (type) => type === files[i].type
-    );
-    if (!availableType) return false;
-  }
-  return true;
-};
-
 export const handleAlert = (responseError?: string) => {
   toast.error(
     validationTexts[responseError as keyof typeof validationTexts] ||
@@ -117,12 +104,13 @@ export const handleGetViolationCount = (hydro: HydroPowerPlant) => {
   if (!upperBasinMax && !upperBasinMin && !lowerBasinMin) return 0;
 
   const violationCount = events.filter((event) => {
-    return (
+    const isViolated =
       (upperBasinMin &&
         upperBasinMax &&
         !inRange(event.upperBasin, upperBasinMin, upperBasinMax)) ||
-      (lowerBasinMin && lt(event.lowerBasin, lowerBasinMin))
-    );
+      (lowerBasinMin && lt(event.lowerBasin, lowerBasinMin));
+
+    return isViolated;
   }).length;
 
   return violationCount;
@@ -133,12 +121,13 @@ const renderTableUpperBasinField = (
   upperBasinMax: number,
   upperBasinMin: number
 ) => {
-  if (
+  const isViolated =
     upperBasin &&
     upperBasinMin &&
     upperBasinMax &&
-    !inRange(upperBasin, upperBasinMin, upperBasinMax)
-  ) {
+    !inRange(upperBasin, upperBasinMin, upperBasinMax);
+
+  if (isViolated) {
     return <BasinValue variant={ButtonColors.DANGER}>{upperBasin}</BasinValue>;
   }
 
