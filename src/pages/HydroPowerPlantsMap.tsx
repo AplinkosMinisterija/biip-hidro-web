@@ -151,7 +151,7 @@ const HydroPowerPlantsMap = ({
                 icon={geom.marker}
                 eventHandlers={{
                   click: () => setCurrent(item),
-                  mouseover: (e) => {
+                  mouseover: (e: any) => {
                     e.target.openPopup();
                   }
                 }}

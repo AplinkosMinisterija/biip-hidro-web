@@ -87,7 +87,7 @@ const HydroPowerPlantGraphs = () => {
       <Container>
         <ButtonFilter
           timeFilter={timeFilter}
-          dateFilter={dateFilter}
+          dateFilter={dateFilter!}
           onSetTimeFilter={setTimeFilter}
           onSetDateFilter={setDateFilter}
         />
