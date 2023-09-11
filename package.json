@@ -60,8 +60,8 @@
     "yup": "^1.0.2"
   },
   "scripts": {
-    "start": "export PORT=8080 && vite",
-    "build": "export PORT=8080 && tsc && vite build",
+    "start": "vite --port 8080",
+    "build": "tsc && vite build --port 8080",
     "serve": "vite preview",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:sarif": "set SARIF_ESLINT_EMBED=true && yarn run lint --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif"

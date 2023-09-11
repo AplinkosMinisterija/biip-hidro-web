@@ -19,7 +19,7 @@ const root = ReactDOM.createRoot(
 );
 
 const queryClient = new QueryClient();
-const env = process?.env;
+const env = import.meta.env;
 
 if (env.VITE_SENTRY_DSN) {
   Sentry.init({
