@@ -61,7 +61,7 @@
   },
   "scripts": {
     "start": "vite --port 8080",
-    "build": "tsc && vite build --port 8080",
+    "build": "tsc && vite build",
     "serve": "vite preview",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:sarif": "set SARIF_ESLINT_EMBED=true && yarn run lint --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif"
