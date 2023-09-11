@@ -44,6 +44,7 @@
     "universal-cookie": "^4.0.4",
     "vite": "^4.4.9",
     "vite-plugin-svgr": "^3.2.0",
+    "vitest": "^0.34.4",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.5.4",
     "workbox-broadcast-update": "^6.5.4",
@@ -60,6 +61,7 @@
     "yup": "^1.0.2"
   },
   "scripts": {
+    "test": "vitest",
     "start": "vite --port 8080",
     "build": "tsc && vite build",
     "serve": "vite preview",
