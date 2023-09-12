@@ -1,5 +1,5 @@
 import { isEqual } from "lodash";
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { TimeRanges } from "../../utils/constants";
 import {
@@ -8,6 +8,7 @@ import {
   timeRangeToQuery
 } from "../../utils/functions";
 import { timeRangeLabels } from "../../utils/texts";
+import { Range } from "../../utils/types";
 import ButtonsGroup from "../buttons/ButtonsGroup";
 import Datepicker from "../fields/DatePicker";
 export interface LabelProps {
@@ -19,6 +20,11 @@ const ButtonFilter = ({
   dateFilter,
   onSetTimeFilter,
   onSetDateFilter
+}: {
+  timeFilter: TimeRanges;
+  dateFilter: Range;
+  onSetDateFilter: React.Dispatch<React.SetStateAction<Range>>;
+  onSetTimeFilter: React.Dispatch<React.SetStateAction<TimeRanges>>;
 }) => {
   const [openCalendar, setOpenCalendar] = useState(false);
 

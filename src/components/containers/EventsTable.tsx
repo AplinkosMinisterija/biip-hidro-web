@@ -2,9 +2,18 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { handlePagination, mapEvents } from "../../utils/functions";
 import { eventLabels } from "../../utils/texts";
+import { Event, HydroPowerPlant } from "../../utils/types";
 import Table, { TableData } from "../other/Table";
 
-const EventTable = ({ events, hydroPowerPlant, loading }) => {
+const EventTable = ({
+  events,
+  hydroPowerPlant,
+  loading
+}: {
+  events: Event[];
+  hydroPowerPlant: HydroPowerPlant;
+  loading: boolean;
+}) => {
   const [tableData, setTableData] = useState<TableData>({ data: [] });
   const [searchParams] = useSearchParams();
   const { page } = Object.fromEntries([...Array.from(searchParams)]);

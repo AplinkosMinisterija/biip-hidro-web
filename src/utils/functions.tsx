@@ -71,6 +71,12 @@ export const timeRangeToQuery = {
       $lt: moment().endOf("day").format()
     }
   },
+  [TimeRanges.OTHER_DAY]: {
+    time: {
+      $gte: moment().startOf("day").format(),
+      $lt: moment().endOf("day").format()
+    }
+  },
   [TimeRanges.DAY]: {
     time: {
       $gte: moment().subtract(1, "week").startOf("day").format(),
