@@ -1,7 +1,5 @@
-import { ResizeObserver as ResizeObserverPolyfill } from "@juggle/resize-observer";
-import { Chart, Interaction, registerables } from "chart.js";
+import { Chart, registerables } from "chart.js";
 import annotationPlugin from "chartjs-plugin-annotation";
-import { CrosshairPlugin, Interpolate } from "chartjs-plugin-crosshair";
 import moment from "moment";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -12,18 +10,18 @@ import zoomPlugin from "chartjs-plugin-zoom";
 import { useEffect } from "react";
 import { initGA, logPageView } from "./utils/analytic";
 
-Chart.register(...registerables, annotationPlugin, CrosshairPlugin, zoomPlugin);
-
+Chart.register(...registerables, annotationPlugin, zoomPlugin);
+//CrosshairPlugin
 //@ts-ignore
-Interaction.modes.interpolate = Interpolate;
+//Interaction.modes.interpolate = Interpolate;
 
 moment.locale("lt");
 
 const App = () => {
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.ResizeObserver = window.ResizeObserver || ResizeObserverPolyfill;
-    }
+    // if (typeof window !== "undefined") {
+    //   window.ResizeObserver = window.ResizeObserver || ResizeObserverPolyfill;
+    // }
 
     initGA();
     logPageView();
