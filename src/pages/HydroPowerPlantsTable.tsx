@@ -9,7 +9,6 @@ import TextField from "../components/fields/TextField";
 import { getFilteredOptions } from "../components/fields/utils/functions";
 import DefaultLayout from "../components/Layouts/Default";
 import Table, { TableData } from "../components/other/Table";
-import { device } from "../styles";
 import { handlePagination, mapHydro } from "../utils/functions";
 import { useHydroPowerPlantsTable } from "../utils/hooks";
 import { slugs } from "../utils/routes";
@@ -74,11 +73,8 @@ const Container = styled.div`
   max-width: 1200px;
   max-height: 100%;
   margin: auto;
-  padding: 20px 0 0 0;
   gap: 12px;
-  @media ${device.mobileL} {
-    padding: 20px;
-  }
+  padding: 20px;
 `;
 
 const FilterContainer = styled.div`

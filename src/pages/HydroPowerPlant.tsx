@@ -128,10 +128,7 @@ const Container = styled.div`
   max-width: 1200px;
   max-height: 100%;
   margin: auto;
-  padding: 20px 0;
-  @media ${device.mobileL} {
-    padding: 20px;
-  }
+  padding: 20px;
 `;
 
 const Name = styled.div`
