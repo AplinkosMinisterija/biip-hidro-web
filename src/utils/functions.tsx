@@ -1,12 +1,16 @@
 import { endOfDay, format, startOfDay } from "date-fns";
 import { utcToZonedTime } from "date-fns-tz";
 import moment from "moment";
+import "moment-timezone";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import { ButtonColors } from "../components/buttons/Button";
 import { DateFormats, TimeRanges } from "./constants";
 import { validationTexts } from "./texts";
 import { HydroPowerPlant, HydroPowerPlantTableProps } from "./types";
+
+const lithuaniaTimezone = "Europe/Vilnius";
+export const currentTimeInLithuania = moment.tz(lithuaniaTimezone);
 
 interface HandlePaginationProps {
   data: any[];
@@ -67,26 +71,26 @@ export const formatDateFrom = (date: Date) => {
 export const timeRangeToQuery = {
   [TimeRanges.HOUR]: {
     time: {
-      $gte: moment().startOf("day").format(),
-      $lt: moment().endOf("day").format()
+      $gte: currentTimeInLithuania.startOf("day").format(),
+      $lt: currentTimeInLithuania.endOf("day").format()
     }
   },
   [TimeRanges.OTHER_DAY]: {
     time: {
-      $gte: moment().startOf("day").format(),
-      $lt: moment().endOf("day").format()
+      $gte: currentTimeInLithuania.startOf("day").format(),
+      $lt: currentTimeInLithuania.endOf("day").format()
     }
   },
   [TimeRanges.DAY]: {
     time: {
-      $gte: moment().subtract(1, "week").startOf("day").format(),
-      $lt: moment().endOf("day").format()
+      $gte: currentTimeInLithuania.subtract(1, "week").startOf("day").format(),
+      $lt: currentTimeInLithuania.endOf("day").format()
     }
   },
   [TimeRanges.WEEK]: {
     time: {
-      $gte: moment().subtract(1, "month").startOf("day").format(),
-      $lt: moment().endOf("day").format()
+      $gte: currentTimeInLithuania.subtract(1, "month").startOf("day").format(),
+      $lt: currentTimeInLithuania.endOf("day").format()
     }
   }
 };
