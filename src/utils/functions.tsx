@@ -202,7 +202,7 @@ export const inRange = (num: number, start: number, end: number) => {
 };
 
 export const lt = (num: number, other: number) => {
-  return num <= other;
+  return num < other;
 };
 
 export const getTimeRangeLabel = (
