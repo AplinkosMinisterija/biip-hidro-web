@@ -63,7 +63,7 @@ export const useEventsByHydroPowerPlantId = (id: string, range: Range) => {
 };
 
 export const useHydroPowerPlantsTable = () => {
-  const { data = [], isLoading } = useQuery(
+  const { data = [], isFetching } = useQuery(
     ["hydroPowerPlantsTable"],
     () => api.getHydroPowerPlantsTable(),
     {
@@ -75,5 +75,5 @@ export const useHydroPowerPlantsTable = () => {
 
   const hydroPowerPlants = mapHydroPowerPlants(data);
 
-  return { hydroPowerPlants, isLoading };
+  return { hydroPowerPlants, isLoading: isFetching };
 };

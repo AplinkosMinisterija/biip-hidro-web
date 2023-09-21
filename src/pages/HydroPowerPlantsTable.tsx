@@ -17,12 +17,16 @@ import { hydroPowerPlantsLabels } from "../utils/texts";
 const HydroPowerPlantsTable = () => {
   const [searchParams] = useSearchParams();
   const [name, setName] = useState("");
+  const [initLoading, setInitLoading] = useState(true);
   const { page } = Object.fromEntries([...Array.from(searchParams)]);
   const [tableData, setTableData] = useState<TableData>({ data: [] });
   const { hydroPowerPlants, isLoading } = useHydroPowerPlantsTable();
+
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (isLoading) return;
+
     const pageData = handlePagination({
       data: getFilteredOptions(hydroPowerPlants, name, (option) => option.name),
       page: page,
@@ -32,6 +36,7 @@ const HydroPowerPlantsTable = () => {
       data: mapHydro(pageData.slicedData),
       totalPages: pageData.totalPages
     });
+    setInitLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, name, isLoading]);
 
@@ -56,7 +61,7 @@ const HydroPowerPlantsTable = () => {
         </FilterContainer>
         <Table
           onClick={(id: string) => navigate(slugs.hydroPowerPlant(id))}
-          loading={isLoading}
+          loading={isLoading || initLoading}
           tableDataInfo={tableData}
           labels={hydroPowerPlantsLabels}
           isFilterApplied={!!name}
