@@ -13,7 +13,7 @@ export default defineConfig({
     open: "/app",
     proxy: {
       "/api": {
-        target: "http://localhost:3000/hidro/api",
+        target: "https://dev.internalapi.biip.lt/hidro/api",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, "")
       }
