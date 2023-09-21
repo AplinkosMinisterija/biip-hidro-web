@@ -85,15 +85,17 @@ const HydroPowerPlantGraphs = () => {
   const renderContent = () => {
     return (
       <Container>
-        <ButtonFilter
-          timeFilter={timeFilter}
-          dateFilter={dateFilter!}
-          onSetTimeFilter={setTimeFilter}
-          onSetDateFilter={setDateFilter}
-        />
-        <Label label={timeRangeLabel} />
-        <ViolationCountMessage count={violationCount} />
-        {renderValues()}
+        <InnerContainer>
+          <ButtonFilter
+            timeFilter={timeFilter}
+            dateFilter={dateFilter!}
+            onSetTimeFilter={setTimeFilter}
+            onSetDateFilter={setDateFilter}
+          />
+          <Label label={timeRangeLabel} />
+          <ViolationCountMessage count={violationCount} />
+          {renderValues()}
+        </InnerContainer>
       </Container>
     );
   };
@@ -120,7 +122,7 @@ const HydroPowerPlantGraphs = () => {
   );
 };
 
-const Container = styled.div`
+const InnerContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -128,7 +130,6 @@ const Container = styled.div`
   max-width: 1200px;
   max-height: 100%;
   margin: auto;
-  padding: 20px;
 `;
 
 const Name = styled.div`
@@ -152,7 +153,10 @@ const KW = styled.span`
 const Header = styled.div`
   background-color: #ecf6ff;
   padding: 20px 20px 0px 20px;
-  margin-bottom: 30px;
+`;
+
+const Container = styled.div`
+  padding: 20px;
 `;
 
 const HeaderContainer = styled.div`
