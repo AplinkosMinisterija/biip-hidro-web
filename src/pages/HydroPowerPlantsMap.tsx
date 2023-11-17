@@ -4,6 +4,7 @@ import "moment/locale/lt";
 //@ts-ignore
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { isEmpty } from "lodash";
 import { useState } from "react";
 import {
   MapContainer,
@@ -61,7 +62,7 @@ const HydroPowerPlantsMap = ({
   const handleSetMarker = (item: HydroPowerPlant) => {
     item.geom.name = item?.name;
 
-    if (!item.apiId) {
+    if (isEmpty(item.events)) {
       return (item.geom.marker = blackMarker);
     }
 

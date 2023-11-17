@@ -68,7 +68,6 @@ export interface HydroPowerPlant {
   id?: string;
   hydrostaticId: string;
   name: string;
-  apiId?: number;
   upperBasinMax: number;
   upperBasinMin: number;
   lowerBasinMin: number;
