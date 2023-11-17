@@ -37,7 +37,6 @@ const HydroPopUp = ({
   const dateTo = customDate.time.$lt;
   const timeRangeLabel = getTimeRangeLabel(dateFrom, dateTo, format);
   let violationCount = current?.geom?.violationCount || 0;
-  const hasApi = !!current?.apiId;
 
   const renderUpperBasinValue = () => {
     const lastEvent = events?.[events?.length - 1]?.upperBasin;
@@ -100,10 +99,8 @@ const HydroPopUp = ({
   };
 
   const renderContent = () => {
-    if (!hasApi) return <BasinText>{formLabels.notReceivingData}</BasinText>;
-
     if (isEmpty(events))
-      return <BasinText>{formLabels.notFoundData}</BasinText>;
+      return <BasinText>{formLabels.notReceivingData}</BasinText>;
 
     return (
       <>

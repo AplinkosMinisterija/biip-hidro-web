@@ -57,13 +57,9 @@ const HydroPowerPlantGraphs = () => {
 
   const violationCount = handleGetViolationCount(fullHydroPowerPlant);
 
-  const hasApi = !!hydroPowerPlant?.apiId;
-
   const renderValues = () => {
-    if (eventsLoading || isLoading) return <LoaderComponent />;
-
-    if (!hasApi)
-      return <NotReceivingData>{formLabels.notReceivingData}</NotReceivingData>;
+    if (eventsLoading || isLoading || !hydroPowerPlant)
+      return <LoaderComponent />;
 
     if (isEmpty(events))
       return <NotReceivingData>{formLabels.notFoundData}</NotReceivingData>;
