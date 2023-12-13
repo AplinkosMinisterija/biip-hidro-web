@@ -23,7 +23,7 @@ const HeaderInfo = ({
     <HeaderContainer>
       {info.map((item, index) => (
         <HeaderInfoItem key={`header-info-${index}`}>
-          <HeaderInfoValue>{item?.value || "-"}</HeaderInfoValue>
+          <HeaderInfoValue>{item?.value || "-"} m</HeaderInfoValue>
           <HeaderInfoText>{item.description}</HeaderInfoText>
         </HeaderInfoItem>
       ))}

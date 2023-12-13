@@ -10,7 +10,8 @@ const ViolationCountMessage = ({ count }: ViolationCountMessageProps) => {
     <Container>
       <Icon src="/alert.svg" />
       <Text>
-        Fiksuoti <Value>{count}</Value> pažeidimai
+        Fiksuoti <Value>{count}</Value> neatitikimai tvenkinio naudojimo
+        taisyklėms
       </Text>
     </Container>
   );

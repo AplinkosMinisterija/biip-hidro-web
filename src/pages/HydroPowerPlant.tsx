@@ -102,9 +102,7 @@ const HydroPowerPlantGraphs = () => {
     <DefaultLayout>
       <Header>
         <HeaderContainer>
-          <Name>
-            {hydroPowerPlant?.name} <KW>({hydroPowerPlant?.power}kw)</KW>
-          </Name>
+          <Name>{hydroPowerPlant?.name}</Name>
           <HeaderInfo hydroPowerPlant={hydroPowerPlant!} />
           <TabBar
             tabs={tabs}
@@ -136,13 +134,6 @@ const Name = styled.div`
   margin-bottom: 12px;
   @media ${device.mobileL} {
     font-size: 2.8rem;
-  }
-`;
-
-const KW = styled.span`
-  font-size: 2.8rem;
-  @media ${device.mobileL} {
-    font-size: 1.6rem;
   }
 `;
 
