@@ -135,9 +135,7 @@ const HydroPopUp = ({
       </IconContainer>
 
       <InnerContainer>
-        <Name>
-          {current?.name} <KW>({current?.power}kw)</KW>
-        </Name>
+        <Name>{current?.name}</Name>
         <Label label={timeRangeLabel} />
         {renderContent()}
       </InnerContainer>
@@ -171,10 +169,6 @@ const Container = styled.div`
 const StyledIcon = styled(Icon)`
   cursor: pointer;
   font-size: 2rem;
-`;
-
-const KW = styled.span`
-  font-size: 1.4rem;
 `;
 
 const IconContainer = styled.div`

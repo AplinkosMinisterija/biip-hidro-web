@@ -22,9 +22,17 @@ export const Graphs = ({ current, timeFilter }: GraphsProps) => {
     return { x: item.time, y: item.upperBasin };
   });
 
+  const upperBasinHasZeroes = upperBasinData
+    .filter((n) => typeof n.y === "number")
+    .some((item) => item.y <= 0);
+
   const lowerBasinData = current?.events?.map((item) => {
     return { x: item.time, y: item.lowerBasin };
   });
+
+  const lowerBasinHasZeroes = lowerBasinData
+    .filter((n) => typeof n.y === "number")
+    .some((item) => item.y <= 0);
 
   const violatedUpperBasinData = upperBasinData?.some((item) => {
     return !inRange(item.y, current.upperBasinMin, current.upperBasinMax);
@@ -39,31 +47,6 @@ export const Graphs = ({ current, timeFilter }: GraphsProps) => {
       legend: {
         display: false
       },
-      // crosshair: {
-      //   line: {
-      //     color: "#F66",
-      //     width: 1
-      //   },
-      //   sync: {
-      //     enabled: true,
-      //     group: 1,
-      //     suppressTooltips: false
-      //   },
-      //   zoom: {
-      //     enabled: true,
-      //     zoomboxBackgroundColor: "rgba(66,133,244,0.2)",
-      //     zoomboxBorderColor: "#48F",
-      //     zoomButtonText: "Reset Zoom",
-      //     zoomButtonClass: "reset-zoom"
-      //   },
-      //   callbacks: {
-      //     beforeZoom: () =>
-      //       function () {
-      //         return true;
-      //       },
-      //     afterZoom: () => function () {}
-      //   }
-      // },
       tooltip: {
         mode: "interpolate",
         intersect: false,
@@ -74,32 +57,34 @@ export const Graphs = ({ current, timeFilter }: GraphsProps) => {
           }
         }
       }
-    },
-    scales: {
-      y: {
-        offset: true,
-        ticks: {
-          callback: function (value: number) {
-            return value.toFixed(2) + " m";
-          },
-          stepSize: 1
-        }
-      },
-      x: {
-        ticks: { maxTicksLimit: 9 },
-        offset: true,
-        type: "time",
-        time: {
-          displayFormats: {
-            hour: "HH:MM",
-            day: "D MMM"
-          },
-
-          unit
-        }
-      }
     }
   };
+
+  const commonScale = (showAtZero: boolean) => ({
+    y: {
+      offset: true,
+      ticks: {
+        callback: function (value: number) {
+          return value.toFixed(2) + " m";
+        },
+        stepSize: 1
+      },
+      ...(showAtZero && { beginAtZero: true })
+    },
+    x: {
+      ticks: { maxTicksLimit: 9 },
+      offset: true,
+      type: "time",
+      time: {
+        displayFormats: {
+          hour: "HH:MM",
+          day: "D MMM"
+        },
+
+        unit
+      }
+    }
+  });
 
   const upperBasinOptions = {
     ...commonOptions.plugins,
@@ -111,6 +96,7 @@ export const Graphs = ({ current, timeFilter }: GraphsProps) => {
           type: "box",
           yMin: current?.upperBasinMin || 0,
           yMax: current?.upperBasinMax || 0,
+
           borderColor: "#11E011",
           borderWidth: 0,
           backgroundColor: "#d3f8d392"
@@ -169,7 +155,7 @@ export const Graphs = ({ current, timeFilter }: GraphsProps) => {
         <Line
           options={{
             plugins: upperBasinOptions as any,
-            scales: commonOptions.scales as any
+            scales: commonScale(upperBasinHasZeroes) as any
           }}
           data={upperBasinDataChartData}
         />
@@ -188,7 +174,7 @@ export const Graphs = ({ current, timeFilter }: GraphsProps) => {
         <Line
           options={{
             plugins: lowerBasinOptions as any,
-            scales: commonOptions.scales as any
+            scales: commonScale(lowerBasinHasZeroes) as any
           }}
           data={lowerBasinChartData}
         />
