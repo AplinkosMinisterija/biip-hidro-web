@@ -31,6 +31,7 @@ const HydroPopUp = ({
   current
 }: PopUpProps) => {
   const { upperBasinMax, upperBasinMin, events, lowerBasinMin } = current;
+
   const navigate = useNavigate();
   const format = DateFormats.DAY;
   const dateFrom = customDate.time.$gte;

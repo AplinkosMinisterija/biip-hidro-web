@@ -22,17 +22,13 @@ export const Graphs = ({ current, timeFilter }: GraphsProps) => {
     return { x: item.time, y: item.upperBasin };
   });
 
-  const upperBasinHasZeroes = upperBasinData
-    .filter((n) => typeof n.y === "number")
-    .some((item) => item.y <= 0);
+  const upperBasinHasZeroes = upperBasinData.some((item) => item.y <= 0);
 
-  const lowerBasinData = current?.events?.map((item) => {
+  const lowerBasinData = current?.events.map((item) => {
     return { x: item.time, y: item.lowerBasin };
   });
 
-  const lowerBasinHasZeroes = lowerBasinData
-    .filter((n) => typeof n.y === "number")
-    .some((item) => item.y <= 0);
+  const lowerBasinHasZeroes = lowerBasinData.some((item) => item.y <= 0);
 
   const violatedUpperBasinData = upperBasinData?.some((item) => {
     return !inRange(item.y, current.upperBasinMin, current.upperBasinMax);

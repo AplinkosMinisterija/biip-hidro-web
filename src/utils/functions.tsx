@@ -1,5 +1,6 @@
 import { endOfDay, format, startOfDay } from "date-fns";
 import { utcToZonedTime } from "date-fns-tz";
+import { isEmpty } from "lodash";
 import moment from "moment";
 import { toast } from "react-toastify";
 import styled from "styled-components";
@@ -215,6 +216,14 @@ export const mapHydroPowerPlants = (list: HydroPowerPlant[]) =>
   list.map((item) => {
     return {
       ...item,
+      ...(!isEmpty(item.events) && {
+        events: item.events.filter((n) => {
+          return (
+            typeof n?.lowerBasin === "number" &&
+            typeof n?.upperBasin === "number"
+          );
+        })
+      }),
       name: handleTemporaryTextTransformation(item.name)
     };
   });
