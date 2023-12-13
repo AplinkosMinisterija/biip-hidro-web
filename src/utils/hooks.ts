@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import api from "./api";
 import { handleAlert, mapHydroPowerPlants } from "./functions";
 import { slugs } from "./routes";
-import { HydroPowerPlant, Range } from "./types";
+import { Event, HydroPowerPlant, Range } from "./types";
 
 export const useHydroPowerPlantsMap = (range: Range) => {
   const [current, setCurrent] = useState<HydroPowerPlant>();
@@ -59,7 +59,14 @@ export const useEventsByHydroPowerPlantId = (id: string, range: Range) => {
     }
   );
 
-  return { events: data, eventsLoading: isLoading };
+  return {
+    events: data.filter((n: Event) => {
+      return (
+        typeof n?.lowerBasin === "number" && typeof n?.upperBasin === "number"
+      );
+    }),
+    eventsLoading: isLoading
+  };
 };
 
 export const useHydroPowerPlantsTable = () => {
