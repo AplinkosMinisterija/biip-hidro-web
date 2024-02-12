@@ -109,14 +109,14 @@ const HydroPopUp = ({
         <Label label={formLabels.waterLevel} />
         <BasinLine>
           <BasinInnerLine>
-            <Basin src="/lowerBasin.svg" />
+            <Basin src="/upperBasin.svg" />
             <BasinText>{formLabels.shortUpperBasin}</BasinText>
           </BasinInnerLine>
           {renderUpperBasinValue()}
         </BasinLine>
         <BasinLine>
           <BasinInnerLine>
-            <Basin src="/upperBasin.svg" />
+            <Basin src="/lowerBasin.svg" />
             <BasinText>{formLabels.shortLowerBasin}</BasinText>
           </BasinInnerLine>
           {renderLowerBasinValue()}
