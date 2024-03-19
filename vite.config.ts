@@ -13,7 +13,7 @@ export default () => {
       "process.env": {}
     },
     server: {
-      open: "/app",
+      open: env.VITE_APP_PATH,
       proxy: {
         "/api": {
           target: env.VITE_PROXY_URL,
