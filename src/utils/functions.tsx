@@ -61,23 +61,46 @@ export const getTimeRangeLabel = (
   dateFrom: string,
   dateTo: string,
   format: DateFormats
-) => `${moment(dateFrom).format(format)} - ${moment(dateTo).format(format)}`;
-
-const getDayRangeUTC = (day: moment.MomentInput = moment()) => ({
-  $gte: moment.utc(day).startOf("day").format(),
-  $lt: moment.utc(day).endOf("day").format()
-});
+) =>
+  `${moment.utc(dateFrom).format(format)} - ${moment
+    .utc(dateTo)
+    .format(format)}`;
 
 export const timeRangeToQuery = {
-  [TimeRanges.HOUR]: { time: getDayRangeUTC() },
-  [TimeRanges.OTHER_DAY]: { time: getDayRangeUTC() },
-  [TimeRanges.DAY]: { time: getDayRangeUTC(moment().subtract(1, "week")) },
-  [TimeRanges.WEEK]: { time: getDayRangeUTC(moment().subtract(1, "month")) }
+  [TimeRanges.HOUR]: {
+    time: {
+      $gte: moment.utc().startOf("day").format(),
+      $lt: moment.utc().endOf("day").format()
+    }
+  },
+  [TimeRanges.OTHER_DAY]: {
+    time: {
+      $gte: moment.utc().startOf("day").format(),
+      $lt: moment.utc().endOf("day").format()
+    }
+  },
+  [TimeRanges.DAY]: {
+    time: {
+      $gte: moment.utc().subtract(6, "days").startOf("day").format(), // paskutinės 7 dienos
+      $lt: moment.utc().endOf("day").format()
+    }
+  },
+  [TimeRanges.WEEK]: {
+    time: {
+      $gte: moment.utc().subtract(29, "days").startOf("day").format(), // paskutiniai 30 dienų
+      $lt: moment.utc().endOf("day").format()
+    }
+  }
 };
 
-export const getCustomTimeRangeToQuery = (day: Date) => ({
-  time: getDayRangeUTC(day)
-});
+export const getCustomTimeRangeToQuery = (day: Date) => {
+  return {
+    time: {
+      $gte: moment.utc(day).startOf("day").format(),
+      $lt: moment.utc(day).endOf("day").format()
+    }
+  };
+};
 
 export const timeRangeOptions = Object.values(TimeRanges);
 
